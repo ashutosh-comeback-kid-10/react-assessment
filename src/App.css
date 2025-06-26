@@ -8,6 +8,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  
 }
 
 .btn {
@@ -36,4 +37,11 @@
   color: #61dafb;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
+}
+
+.negative {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
