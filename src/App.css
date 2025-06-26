@@ -39,9 +39,3 @@
   transform: translateY(4px);
 }
 
-.negative {
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
