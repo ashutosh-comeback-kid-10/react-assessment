@@ -1,10 +1,13 @@
-const Child = () => {
+const Child = ({setCount}) => {
+
+
+
   const handleMinusClick = () => {
-    /* Implement logic here */
+    setCount(prevNum => prevNum - 1)
   };
 
   const handlePlusClick = () => {
-    /* Implement logic here */
+    setCount(prevNum => prevNum + 1)
   };
 
   return (
