@@ -31,7 +31,7 @@ function App() {
   function isChecked(id) {
     setItems((prevItem) =>
       prevItem.map((item) =>
-        id === item.id ? { ...item, checked: !item.checked } : item
+        id === item.id ? { ...item, checked: !item.checked} : item
       )
     );
   }
@@ -39,6 +39,13 @@ function App() {
   function removeItem(id) {
     setItems((prevItems) => prevItems.filter((item) => id !== item.id));
   }
+
+  function valueCheck(){
+    const valueCheckItem = items.filter((item) => item.checked === true)
+    return `${valueCheckItem.length} / ${items.length}`
+  }
+  
+  
 
   return (
     <div className="container">
@@ -59,6 +66,19 @@ function App() {
         >
           Add
         </button>
+
+        <button
+          className="v__button"
+          onClick={() => {
+            setItems((prevItem) =>
+              prevItem.map((item, index) =>
+                index === 0 ? { ...item, checked: !item.checked} : item
+              )
+            )
+          }}
+        >
+          Make first checked
+        </button>
       </div>
       <div className="v__list-container overflow-y-scroll">
         {items.map((item) => (
@@ -71,6 +91,9 @@ function App() {
             checked={item.checked}
           />
         ))}
+        <div>
+          <p>Value: {valueCheck()}</p>
+        </div>
       </div>
     </div>
   );
