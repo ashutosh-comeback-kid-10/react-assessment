@@ -2,26 +2,41 @@ import "./App.css";
 import { ShoppingListItem } from "./components/ShoppingListItem";
 import React from "react";
 import { nanoid } from "nanoid";
+import { faker } from "@faker-js/faker";
+
+faker.seed(2)
+
+const DATA = ["Carrots", "Apple", "haricot beans"];
 
 function App() {
-  const [items, setItems] = React.useState([]);
+  const [items, setItems] = React.useState(dataMap);
   const [inputValue, setInputValue] = React.useState("");
+
 
   
 
+  
   function updateState(e) {
     setInputValue(e.target.value);
   }
 
+  function dataMap() {
+    return DATA.map((item) => ({ id: nanoid(), name: item, checked: false }));
+  }
+
   function addItem() {
-    const duplicate = items.some(item => item.name.toLowerCase() === inputValue.toLowerCase())
-    if (inputValue === "" || duplicate) {
-      return alert("Error");
+    const duplicate = items.some(
+      (item) => item.name.toLowerCase() === inputValue.toLowerCase()
+    );
+    if (inputValue === "") {
+      return alert("You need to enter some items");
+    } else if (duplicate) {
+      return alert("You have already added the item");
     } else {
       return (
         setItems((prevItem) => [
-          ...prevItem,
           { id: nanoid(), name: inputValue, checked: false },
+          ...prevItem,
         ]),
         setInputValue("")
       );
@@ -31,21 +46,33 @@ function App() {
   function isChecked(id) {
     setItems((prevItem) =>
       prevItem.map((item) =>
-        id === item.id ? { ...item, checked: !item.checked} : item
+        id === item.id ? { ...item, checked: !item.checked } : item
       )
     );
+  }
+
+  function resetBtn() {
+    setItems(dataMap());
   }
 
   function removeItem(id) {
     setItems((prevItems) => prevItems.filter((item) => id !== item.id));
   }
 
-  function valueCheck(){
-    const valueCheckItem = items.filter((item) => item.checked === true)
-    return `${valueCheckItem.length} / ${items.length}`
+  function removeCheckedItems() {
+    setItems((prevItems) => prevItems.filter((item) => item.checked === false));
   }
-  
-  
+ 
+
+  const randomIngredient = () => {
+    const random = faker.food.ingredient()
+    const duplicate = items.some(
+      (item) => item.name.toLowerCase() === random.toLowerCase()
+    );
+    duplicate ? alert("You have already added the item") : setItems(prevItem => [...prevItem, ({name: random, id: nanoid(), checked: false})]);
+    
+  };
+
 
   return (
     <div className="container">
@@ -58,12 +85,10 @@ function App() {
           className="v__input flex-1"
           value={inputValue}
           onChange={(e) => updateState(e)}
+          onKeyDown={(e) => (e.key === "Enter" ? addItem() : null)}
         />
 
-        <button
-          className="v__button"
-          onClick={addItem}
-        >
+        <button className="v__button" onClick={addItem}>
           Add
         </button>
 
@@ -72,12 +97,24 @@ function App() {
           onClick={() => {
             setItems((prevItem) =>
               prevItem.map((item, index) =>
-                index === 0 ? { ...item, checked: !item.checked} : item
+                index === 0 ? { ...item, checked: !item.checked } : item
               )
-            )
+            );
           }}
         >
           Make first checked
+        </button>
+
+        <button className="v__button" onClick={resetBtn}>
+          Reset
+        </button>
+
+        <button className="v__button" onClick={removeCheckedItems}>
+          Remove Checked Items
+        </button>
+
+        <button className="v__button" onClick={randomIngredient}>
+          Random
         </button>
       </div>
       <div className="v__list-container overflow-y-scroll">
@@ -92,7 +129,10 @@ function App() {
           />
         ))}
         <div>
-          <p>Value: {valueCheck()}</p>
+          <p>
+            Value: {items.filter((item) => item.checked === true).length} /{" "}
+            {items.length}
+          </p>
         </div>
       </div>
     </div>
