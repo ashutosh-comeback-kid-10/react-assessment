@@ -1,9 +1,9 @@
 import classes from "./Album.module.css";
 
-export const Album = () => {
+export const Album = (props) => {
   return (
-    <div className={classes.container}>
-      <h2>Title: quidem molestiae enim</h2>
+    <div className={classes.container} onClick={props.onClick}>
+      <h2>Title: {props.title}</h2>
     </div>
   );
 };
